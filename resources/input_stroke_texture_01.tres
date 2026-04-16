@@ -1,0 +1,10 @@
+[gd_resource type="GradientTexture2D" load_steps=2 format=3 uid="uid://cmm4pb3ulda0b"]
+
+[ext_resource type="Gradient" uid="uid://tip7aiqof6c7" path="res://4_creating_first_2d_game/resources/input_stroke_gradient_01.tres" id="1_je2dr"]
+
+[resource]
+gradient = ExtResource("1_je2dr")
+width = 32
+height = 32
+fill_from = Vector2(0.1, 0.1)
+fill_to = Vector2(0.9, 0.9)

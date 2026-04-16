@@ -1,0 +1,138 @@
+[gd_resource type="Theme" load_steps=16 format=3 uid="uid://458fksvt63he"]
+
+[ext_resource type="Texture2D" uid="uid://dab0y2y8fxify" path="res://textures/input_slider_fill_02_128x64.png" id="1_la8rx"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ge50u"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_joelb"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_753dr"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_g4smm"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_joelb"]
+texture_margin_left = 24.0
+texture_margin_top = 24.0
+texture_margin_right = 24.0
+texture_margin_bottom = 24.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_g4smm"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_753dr"]
+bg_color = Color(0.8509804, 0.8509804, 0.8509804, 1)
+corner_radius_top_left = 500
+corner_radius_top_right = 500
+corner_radius_bottom_right = 500
+corner_radius_bottom_left = 500
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ris7f"]
+texture = ExtResource("1_la8rx")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_753dr"]
+texture_margin_left = 4.0
+texture_margin_top = 4.0
+texture_margin_right = 4.0
+texture_margin_bottom = 4.0
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ris7f"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_nk8bl"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_m3v74"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_esh3y"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0kwkt"]
+
+[resource]
+Button/font_sizes/font_size = 96
+Button/fonts/font = null
+Button/styles/disabled = null
+Button/styles/disabled_mirrored = null
+Button/styles/focus = null
+Button/styles/hover = null
+Button/styles/normal = null
+Button/styles/normal_mirrored = null
+Button/styles/pressed = null
+Button/styles/pressed_mirrored = null
+HGap1/base_type = &"HSeparator"
+HGap1/constants/separation = 16
+HGap1/styles/separator = null
+HGap2/base_type = &"HSeparator"
+HGap2/constants/separation = 24
+HGap2/styles/separator = SubResource("StyleBoxEmpty_ge50u")
+HGap3/base_type = &"HSeparator"
+HGap3/constants/separation = 32
+HGap3/styles/separator = SubResource("StyleBoxEmpty_joelb")
+HGap4/base_type = &"HSeparator"
+HGap4/constants/separation = 48
+HGap4/styles/separator = SubResource("StyleBoxEmpty_753dr")
+HGap5/base_type = &"HSeparator"
+HGap5/constants/separation = 64
+HGap5/styles/separator = SubResource("StyleBoxEmpty_g4smm")
+HSeparator/constants/separation = 0
+HSeparator/styles/separator = null
+HeaderLarge/font_sizes/font_size = 80
+HeaderLarge/fonts/font = null
+HeaderMedium/font_sizes/font_size = 64
+HeaderMedium/fonts/font = null
+HeaderSmall/font_sizes/font_size = 32
+HeaderSmall/fonts/font = null
+InputFieldPanelContainer/base_type = &"PanelContainer"
+InputFieldPanelContainer/styles/panel = SubResource("StyleBoxTexture_joelb")
+Label/font_sizes/font_size = 32
+Label/fonts/font = null
+MainButton/base_type = &"Label"
+MainButton/font_sizes/font_size = 128
+MainButton/fonts/font = null
+MainMarginContainer/base_type = &"MarginContainer"
+MainMarginContainer/constants/margin_bottom = 80
+MainMarginContainer/constants/margin_left = 48
+MainMarginContainer/constants/margin_right = 48
+MainMarginContainer/constants/margin_top = 128
+SliderBorder/base_type = &"MarginContainer"
+SliderBorder/constants/margin_bottom = 4
+SliderBorder/constants/margin_left = 5
+SliderBorder/constants/margin_right = 5
+SliderBorder/constants/margin_top = 4
+SliderGrabber/base_type = &"Control"
+SliderGrabber/styles/Texture = SubResource("StyleBoxTexture_g4smm")
+SliderGrabberMargin/base_type = &"MarginContainer"
+SliderGrabberMargin/constants/margin_bottom = -4
+SliderGrabberMargin/constants/margin_top = -4
+SliderResizableBackground/base_type = &"Panel"
+SliderResizableBackground/styles/panel = SubResource("StyleBoxFlat_753dr")
+SliderResizableFill/base_type = &"Panel"
+SliderResizableFill/styles/panel = SubResource("StyleBoxTexture_ris7f")
+TextNormal/base_type = &"HeaderSmall"
+TextNormal/font_sizes/font_size = 32
+TextNormal/fonts/font = null
+TextboxContainer/base_type = &"PanelContainer"
+TextboxContainer/styles/panel = SubResource("StyleBoxTexture_753dr")
+TextboxMargin/base_type = &"MarginContainer"
+TextboxMargin/constants/margin_bottom = 0
+TextboxMargin/constants/margin_left = 0
+TextboxMargin/constants/margin_right = 0
+TextboxMargin/constants/margin_top = 0
+TextboxPading/base_type = &"MarginContainer"
+TextboxPading/constants/margin_bottom = 2
+TextboxPading/constants/margin_left = 8
+TextboxPading/constants/margin_right = 8
+TextboxPading/constants/margin_top = 2
+VGap1/base_type = &"VSeparator"
+VGap1/constants/separation = 16
+VGap1/styles/separator = SubResource("StyleBoxEmpty_ris7f")
+VGap2/base_type = &"VSeparator"
+VGap2/constants/separation = 24
+VGap2/styles/separator = SubResource("StyleBoxEmpty_nk8bl")
+VGap3/base_type = &"VSeparator"
+VGap3/constants/separation = 32
+VGap3/styles/separator = SubResource("StyleBoxEmpty_m3v74")
+VGap4/base_type = &"VSeparator"
+VGap4/constants/separation = 48
+VGap4/styles/separator = SubResource("StyleBoxEmpty_esh3y")
+VGap5/base_type = &"VSeparator"
+VGap5/constants/separation = 64
+VGap5/styles/separator = SubResource("StyleBoxEmpty_0kwkt")
+button_main_border/base_type = &"Panel"
+button_main_border/styles/panel = null
