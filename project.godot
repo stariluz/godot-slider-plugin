@@ -12,7 +12,10 @@ config_version=5
 
 config/name="slider-plugin"
 config/features=PackedStringArray("4.5", "Forward Plus")
-config/icon="res://icon.svg"
+
+[debug]
+
+gdscript/warnings/exclude_addons=false
 
 [display]
 

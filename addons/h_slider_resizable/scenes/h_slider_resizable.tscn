@@ -1,0 +1,84 @@
+[gd_scene load_steps=4 format=3 uid="uid://ccjw3jgof58bm"]
+
+[ext_resource type="Theme" uid="uid://458fksvt63he" path="res://resources/ui_theme_01.tres" id="1_h1pu4"]
+[ext_resource type="Script" uid="uid://ckscn6l7d4g8x" path="res://addons/h_slider_resizable/h_slider_resizable.gd" id="2_6ehs4"]
+[ext_resource type="Texture2D" uid="uid://bn01xf7yqhxlt" path="res://textures/input_circle_grabber_01_64x64.png" id="3_7y2i7"]
+
+[node name="HSliderResizable" type="HSlider"]
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.044680852
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 1
+focus_mode = 0
+theme = ExtResource("1_h1pu4")
+max_value = 0.62
+step = 0.05
+value = 0.55
+script = ExtResource("2_6ehs4")
+_initialized = true
+metadata/_custom_type_script = "uid://ckscn6l7d4g8x"
+metadata/_edit_use_anchors_ = true
+metadata/_edit_group_ = true
+
+[node name="TrackContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_h1pu4")
+theme_type_variation = &"SliderBorder"
+
+[node name="Track" type="Panel" parent="TrackContainer"]
+clip_children = 2
+layout_mode = 2
+theme = ExtResource("1_h1pu4")
+theme_type_variation = &"SliderResizableBackground"
+
+[node name="TrackFill" type="Panel" parent="TrackContainer/Track"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.8
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_h1pu4")
+theme_type_variation = &"SliderResizableFill"
+
+[node name="ThumbContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_h1pu4")
+theme_type_variation = &"SliderGrabberMargin"
+theme_override_constants/margin_left = 25
+theme_override_constants/margin_right = 25
+
+[node name="ThumbWrapper" type="Control" parent="ThumbContainer"]
+layout_mode = 2
+theme = ExtResource("1_h1pu4")
+theme_type_variation = &"SliderResizableFill"
+
+[node name="Thumb" type="TextureRect" parent="ThumbContainer/ThumbWrapper"]
+layout_direction = 1
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.8
+anchor_right = 0.8
+anchor_bottom = 1.0
+offset_left = -20.0
+offset_right = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_h1pu4")
+theme_type_variation = &"SliderGrabber"
+texture = ExtResource("3_7y2i7")
+expand_mode = 3
+stretch_mode = 5
+metadata/_edit_use_anchors_ = true
