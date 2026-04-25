@@ -7,7 +7,7 @@ var reset_slider_plugin = ResetSliderPlugin.new()
 
 
 func _enter_tree():
-	add_custom_type("HSliderResizable", "Slider", SliderResizablePlugin, preload("icon.svg"))
+	add_custom_type("HSliderResizable", "Slider", SliderResizablePlugin, preload("res://addons/h_slider_resizable/HSlider.svg"))
 	add_inspector_plugin(reset_slider_plugin)
 
 

@@ -18,7 +18,8 @@ func _parse_begin(object):
 	)
 	
 	dialog.confirmed.connect(func():
-		object._reset_children()
+		var obj:HSliderResizable=object
+		obj._on_reset_children()
 	)
 	
 	add_custom_control(button)

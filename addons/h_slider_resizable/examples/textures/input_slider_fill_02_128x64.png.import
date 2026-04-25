@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bn01xf7yqhxlt"
-path="res://.godot/imported/input_circle_grabber_01_64x64.png-a4127f5d997846ac51dd2469e43595d5.ctex"
+uid="uid://dab0y2y8fxify"
+path="res://.godot/imported/input_slider_fill_02_128x64.png-20d8377913345ca544929e3f6bbffedc.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://textures/input_circle_grabber_01_64x64.png"
-dest_files=["res://.godot/imported/input_circle_grabber_01_64x64.png-a4127f5d997846ac51dd2469e43595d5.ctex"]
+source_file="res://addons/h_slider_resizable/examples/textures/input_slider_fill_02_128x64.png"
+dest_files=["res://.godot/imported/input_slider_fill_02_128x64.png-20d8377913345ca544929e3f6bbffedc.ctex"]
 
 [params]
 

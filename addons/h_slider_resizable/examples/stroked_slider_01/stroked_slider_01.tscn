@@ -1,0 +1,123 @@
+[gd_scene load_steps=5 format=3 uid="uid://bp01j0uyhnq55"]
+
+[ext_resource type="Script" uid="uid://v5hfbpfysurt" path="res://addons/h_slider_resizable/examples/stroked_slider_01/stroked_slider.gd" id="1_fqeji"]
+[ext_resource type="Material" uid="uid://cx5tk3vbb25hr" path="res://addons/h_slider_resizable/examples/stroked_slider_01/slider_noisy_stroke_01.tres" id="2_ccd56"]
+[ext_resource type="Theme" uid="uid://458fksvt63he" path="res://addons/h_slider_resizable/examples/resources/ui_theme_01.tres" id="3_kspjq"]
+[ext_resource type="Texture2D" uid="uid://bn01xf7yqhxlt" path="res://addons/h_slider_resizable/examples/textures/input_circle_grabber_01_64x64.png" id="4_n3pge"]
+
+[node name="StorkedSlider01" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.9916667
+anchor_bottom = 0.06489362
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+metadata/_edit_use_anchors_ = true
+
+[node name="HSliderResizable" type="HSlider" parent="MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 1
+max_value = 1.0
+step = 0.05
+script = ExtResource("1_fqeji")
+_initialized = true
+metadata/_custom_type_script = "uid://ckscn6l7d4g8x"
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="MarginContainer/HSliderResizable"]
+material = ExtResource("2_ccd56")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="MarginContainer/HSliderResizable/SubViewportContainer"]
+transparent_bg = true
+handle_input_locally = false
+size = Vector2i(456, 41)
+render_target_update_mode = 4
+
+[node name="Track" type="Panel" parent="MarginContainer/HSliderResizable/SubViewportContainer/SubViewport"]
+clip_children = 2
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme = ExtResource("3_kspjq")
+theme_type_variation = &"SliderTrack"
+
+[node name="TrackFillContainer" type="MarginContainer" parent="MarginContainer/HSliderResizable/SubViewportContainer/SubViewport/Track"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_kspjq")
+theme_override_constants/margin_left = 28
+theme_override_constants/margin_right = 28
+
+[node name="TrackWrapper" type="Control" parent="MarginContainer/HSliderResizable/SubViewportContainer/SubViewport/Track/TrackFillContainer"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="TrackFill" type="Panel" parent="MarginContainer/HSliderResizable/SubViewportContainer/SubViewport/Track/TrackFillContainer/TrackWrapper"]
+use_parent_material = true
+layout_mode = 1
+anchors_preset = -1
+anchor_bottom = 1.0
+offset_left = -28.5
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme = ExtResource("3_kspjq")
+theme_type_variation = &"SliderTrackFill"
+
+[node name="GrabberContainer" type="MarginContainer" parent="MarginContainer/HSliderResizable"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_kspjq")
+theme_type_variation = &"SliderGrabberContainer"
+theme_override_constants/margin_left = 28
+theme_override_constants/margin_right = 28
+
+[node name="GrabberWrapper" type="Control" parent="MarginContainer/HSliderResizable/GrabberContainer"]
+layout_mode = 2
+mouse_filter = 1
+theme = ExtResource("3_kspjq")
+theme_type_variation = &"SliderResizableFill"
+
+[node name="Grabber" type="TextureRect" parent="MarginContainer/HSliderResizable/GrabberContainer/GrabberWrapper"]
+material = ExtResource("2_ccd56")
+layout_direction = 1
+layout_mode = 1
+anchors_preset = -1
+anchor_bottom = 1.0
+offset_left = -20.0
+offset_right = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_kspjq")
+theme_type_variation = &"SliderGrabber"
+texture = ExtResource("4_n3pge")
+expand_mode = 3
+stretch_mode = 5
+metadata/_edit_use_anchors_ = true
