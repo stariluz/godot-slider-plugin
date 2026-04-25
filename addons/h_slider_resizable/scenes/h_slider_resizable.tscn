@@ -6,23 +6,39 @@
 
 [node name="HSliderResizable" type="HSlider"]
 anchors_preset = -1
+anchor_top = 0.13297872
 anchor_right = 1.0
-anchor_bottom = 0.044680852
+anchor_bottom = 0.17872341
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_vertical = 1
 focus_mode = 0
+mouse_default_cursor_shape = 10
 theme = ExtResource("1_h1pu4")
-max_value = 0.62
+max_value = 1.0
 step = 0.05
-value = 0.55
+scrollable = false
+tick_count = 2
+ticks_on_borders = true
 script = ExtResource("2_6ehs4")
 _initialized = true
 metadata/_custom_type_script = "uid://ckscn6l7d4g8x"
 metadata/_edit_use_anchors_ = true
 metadata/_edit_group_ = true
 
-[node name="TrackContainer" type="MarginContainer" parent="."]
+[node name="Track" type="Panel" parent="."]
+clip_children = 2
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme = ExtResource("1_h1pu4")
+theme_type_variation = &"SliderTrack"
+
+[node name="TrackContainer" type="MarginContainer" parent="Track"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -30,25 +46,26 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_h1pu4")
-theme_type_variation = &"SliderBorder"
+theme_type_variation = &"SliderContainer"
+theme_override_constants/margin_left = 29
+theme_override_constants/margin_right = 29
 
-[node name="Track" type="Panel" parent="TrackContainer"]
-clip_children = 2
+[node name="TrackWrapper" type="Control" parent="Track/TrackContainer"]
 layout_mode = 2
-theme = ExtResource("1_h1pu4")
-theme_type_variation = &"SliderResizableBackground"
+mouse_filter = 1
 
-[node name="TrackFill" type="Panel" parent="TrackContainer/Track"]
+[node name="TrackFill" type="Panel" parent="Track/TrackContainer/TrackWrapper"]
 layout_mode = 1
 anchors_preset = -1
-anchor_right = 0.8
 anchor_bottom = 1.0
+offset_left = -29.5
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 1
 theme = ExtResource("1_h1pu4")
-theme_type_variation = &"SliderResizableFill"
+theme_type_variation = &"SliderTrackFill"
 
-[node name="ThumbContainer" type="MarginContainer" parent="."]
+[node name="GrabberContainer" type="MarginContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -56,21 +73,20 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_h1pu4")
-theme_type_variation = &"SliderGrabberMargin"
-theme_override_constants/margin_left = 25
-theme_override_constants/margin_right = 25
+theme_type_variation = &"SliderGrabberContainer"
+theme_override_constants/margin_left = 29
+theme_override_constants/margin_right = 29
 
-[node name="ThumbWrapper" type="Control" parent="ThumbContainer"]
+[node name="GrabberWrapper" type="Control" parent="GrabberContainer"]
 layout_mode = 2
+mouse_filter = 1
 theme = ExtResource("1_h1pu4")
 theme_type_variation = &"SliderResizableFill"
 
-[node name="Thumb" type="TextureRect" parent="ThumbContainer/ThumbWrapper"]
+[node name="Grabber" type="TextureRect" parent="GrabberContainer/GrabberWrapper"]
 layout_direction = 1
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.8
-anchor_right = 0.8
 anchor_bottom = 1.0
 offset_left = -20.0
 offset_right = 20.0
