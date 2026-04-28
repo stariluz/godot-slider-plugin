@@ -1,12 +1,31 @@
-[gd_scene load_steps=3 format=3 uid="uid://dwqj0w1l2dxkp"]
+[gd_scene load_steps=6 format=3 uid="uid://dwqj0w1l2dxkp"]
 
 [ext_resource type="Theme" uid="uid://458fksvt63he" path="res://addons/h_slider_resizable/examples/resources/ui_theme_01.tres" id="1_abkc2"]
-[ext_resource type="Texture2D" uid="uid://bn01xf7yqhxlt" path="res://addons/h_slider_resizable/examples/textures/input_circle_grabber_01_64x64.png" id="3_twqhr"]
+[ext_resource type="Script" uid="uid://ckscn6l7d4g8x" path="res://addons/h_slider_resizable/scripts/h_slider_resizable.gd" id="2_42r0d"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_r7fe7"]
+bg_color = Color(0.89059, 0.89059, 0.8905901, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_42r0d"]
+bg_color = Color(0.38065714, 0.6610188, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_abkc2"]
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
 
 [node name="HSliderResizableDefault" type="HSlider"]
+custom_minimum_size = Vector2(0, 24)
 anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 0.05638298
+offset_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_vertical = 1
@@ -15,6 +34,9 @@ theme = ExtResource("1_abkc2")
 max_value = 1.0
 step = 0.05
 value = 1.0
+script = ExtResource("2_42r0d")
+_initialized = true
+metadata/_custom_type_script = "uid://ckscn6l7d4g8x"
 metadata/_edit_use_anchors_ = true
 metadata/_edit_group_ = true
 
@@ -27,48 +49,40 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
-theme = ExtResource("1_abkc2")
-theme_type_variation = &"SliderTrack"
+theme_override_styles/panel = SubResource("StyleBoxFlat_r7fe7")
 
-[node name="TrackFillContainer" type="MarginContainer" parent="Track"]
+[node name="FillContainer" type="MarginContainer" parent="Track"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = ExtResource("1_abkc2")
-theme_override_constants/margin_left = 35
-theme_override_constants/margin_right = 35
 
-[node name="TrackWrapper" type="Control" parent="Track/TrackFillContainer"]
+[node name="FillWrapper" type="Control" parent="Track/FillContainer"]
 layout_mode = 2
 mouse_filter = 1
 
-[node name="TrackFill" type="Panel" parent="Track/TrackFillContainer/TrackWrapper"]
+[node name="Fill" type="Panel" parent="Track/FillContainer/FillWrapper"]
 use_parent_material = true
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.057
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_42r0d")
+
+[node name="GrabberContainer" type="MarginContainer" parent="."]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -35.5
+offset_left = 27.0
+offset_right = -27.0
 grow_horizontal = 2
 grow_vertical = 2
-mouse_filter = 1
-theme = ExtResource("1_abkc2")
-theme_type_variation = &"SliderTrackFill"
-
-[node name="GrabberContainer" type="MarginContainer" parent="."]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme = ExtResource("1_abkc2")
-theme_type_variation = &"SliderGrabberContainer"
-theme_override_constants/margin_left = 35
-theme_override_constants/margin_right = 35
 
 [node name="GrabberWrapper" type="Control" parent="GrabberContainer"]
 layout_mode = 2
@@ -76,20 +90,14 @@ mouse_filter = 1
 theme = ExtResource("1_abkc2")
 theme_type_variation = &"SliderResizableFill"
 
-[node name="Grabber" type="TextureRect" parent="GrabberContainer/GrabberWrapper"]
+[node name="Grabber" type="Panel" parent="GrabberContainer/GrabberWrapper"]
 layout_direction = 1
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 1.0
-anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -20.0
-offset_right = 20.0
+offset_left = -27.0
+offset_right = 27.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = ExtResource("1_abkc2")
-theme_type_variation = &"SliderGrabber"
-texture = ExtResource("3_twqhr")
-expand_mode = 3
-stretch_mode = 5
+theme_override_styles/panel = SubResource("StyleBoxFlat_abkc2")
 metadata/_edit_use_anchors_ = true

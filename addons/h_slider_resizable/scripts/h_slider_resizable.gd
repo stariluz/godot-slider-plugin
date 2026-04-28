@@ -2,9 +2,23 @@
 extends HSlider
 class_name HSliderResizable
 
-@export var end_fill_on_center_of_graber:bool=true
-@export var grabber_centered_on_limits:bool=true
-@export_storage var _initialized := false
+@export var fill_centered_to_grabber:bool=true:
+	set(value):
+		fill_centered_to_grabber=value
+		_update_margins()
+		
+@export var grabber_centered_on_limits:bool=true:
+	set(value):
+		grabber_centered_on_limits=value
+		_update_margins()
+		
+@export var fill_offset:float=0.0:
+	set(value):
+		fill_offset=value
+		_update_margins()
+		
+@export_storage var _initialized:bool = false
+@export_storage var _alignment_ratio:Vector2 = Vector2.ZERO
 		
 @onready var fill_container:Control
 @onready var fill:Control
@@ -18,7 +32,7 @@ var _start_ratio:float = 0.0
 
 var _default_scene:PackedScene
 	
-func _get_default_scene() -> PackedScene:
+func _load_default_scene() -> PackedScene:
 	return preload("res://addons/h_slider_resizable/scenes/h_slider_resizable_default.tscn")
 	
 func _get_fill_container()->Control:
@@ -34,24 +48,61 @@ func _get_grabber()->Control:
 	return $GrabberContainer/GrabberWrapper/Grabber
 
 func _value_changed(_new_value: float) -> void:
-	_update_ui(_new_value)
+	_update_ui()
 
 func _notification(what):
 	if what == NOTIFICATION_EDITOR_PRE_SAVE:
-		_update_ui(value)
+		_update_ui()
 		
 func _ready() -> void:
 	if _default_scene == null:
-		_default_scene = _get_default_scene()
+		_default_scene = _load_default_scene()
 
 	if Engine.is_editor_hint() and not _initialized:
-		_on_reset_children()
+		reset_children()
 		_initialized = true
 	else:
 		_bind_ui()
 	
-	_update_ui(value)
+	_update_ui()
 
+func get_state():
+	var scene := PackedScene.new()
+	scene.pack(self)
+	return scene
+	
+func set_state(state:PackedScene) -> void:
+	if state == null:
+		return
+	
+	ReparentHelper.clean_children(self)
+	
+	var instance = state.instantiate()
+	
+	for child in instance.get_children():
+		ReparentHelper.reparent(child, self)
+	
+	instance.queue_free()
+	_restore_properties(instance)
+	_bind_ui()
+	_update_ui()
+	
+func _restore_properties(instance:HSliderResizable):
+	if !instance is HSliderResizable:
+		return
+	
+	self._alignment_ratio=instance._alignment_ratio
+	
+func reset_children()-> void:
+	set_state(_default_scene)
+	
+func save_alignment_ratio()->void:
+	_alignment_ratio=Vector2(
+		grabber_container.offset_left/grabber.size.y,
+		grabber_container.offset_right/grabber.size.y
+	) 
+	print("Alignment ratio:", _alignment_ratio)
+	
 func _bind_ui()->void:
 	fill_container = _get_fill_container()
 	fill = _get_fill()
@@ -65,49 +116,44 @@ func _bind_ui()->void:
 	if not gui_input.is_connected(_on_gui_input):
 		gui_input.connect(_on_gui_input)
 
-func _update_ui(_value:float) -> void:
+func _update_ui() -> void:
 	if not is_inside_tree() or not fill or not grabber:
 		return
 	
 	var visual_value:float = ratio
 	
+	if grabber.resized.is_connected(_on_grabber_resized):
+		grabber.resized.disconnect(_on_grabber_resized)
+		
 	fill.anchor_right = visual_value
 	grabber.anchor_left = visual_value
 	grabber.anchor_right = visual_value
+	
+	grabber.resized.connect(_on_grabber_resized)
 
 func _update_margins() -> void:
 	if not grabber or not grabber_container or not fill_container:
 		return
 		
-	var margin_value=0.0
-	if !grabber_centered_on_limits:
-		margin_value = grabber.size.y / 2.0
-		
-	fill.offset_left=-margin_value
-	if !end_fill_on_center_of_graber:
-		fill.offset_right=margin_value
-	else:
-		fill.offset_right=0
-		
-	fill_container.add_theme_constant_override("margin_left", margin_value)
-	fill_container.add_theme_constant_override("margin_right", margin_value)
-	grabber_container.add_theme_constant_override("margin_left", margin_value)
-	grabber_container.add_theme_constant_override("margin_right", margin_value)
-
-func _on_reset_children()-> void:
-	for child in get_children():
-		remove_child(child)
-		child.queue_free()
-		
-	var instance = _default_scene.instantiate()
+	#var margin_value=0.0
+	#if !grabber_centered_on_limits:
+		#margin_value = grabber.size.y / 2.0
+		#
+	#fill.offset_left=-margin_value
+	#if !fill_centered_to_grabber:
+		#fill.offset_right=margin_value+fill_offset
+	#else:
+		#fill.offset_right=+fill_offset
+	#
+	#fill_container.add_theme_constant_override("margin_left", margin_value)
+	#fill_container.add_theme_constant_override("margin_right", margin_value)
+	#grabber_container.add_theme_constant_override("margin_left", margin_value)
+	#grabber_container.add_theme_constant_override("margin_right", margin_value)
 	
-	for child in instance.get_children():
-		ReparentHelper.reparent(child, self)
+	#grabber.size.x=grabber.size.y
+	#grabber.offset_left=-grabber.size.y/2
+	#grabber.offset_right=grabber.size.y/2
 	
-	instance.queue_free()
-	_bind_ui()
-	_update_ui(value)
-
 func _on_grabber_resized() -> void:
 	_update_margins()
 
@@ -131,7 +177,7 @@ func _on_mouse_button(event:InputEventMouseButton)->void:
 			drag_started.emit()
 			_active=true
 			_start_ratio=ratio
-			value_changed.emit(value)
+			value_changed.emit()
 		else:
 			_active=false
 			var has_changed:bool = is_equal_approx(_ratio_before_dragging,ratio)

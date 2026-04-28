@@ -1,6 +1,6 @@
 [gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://cx5tk3vbb25hr"]
 
-[ext_resource type="Shader" uid="uid://cghk38qg27hek" path="res://addons/h_slider_resizable/examples/stroked_slider_01/texture_noisy_stroke_01.gdshader" id="1_5f2jb"]
+[ext_resource type="Shader" uid="uid://cghk38qg27hek" path="res://addons/h_slider_resizable/examples/shaders/texture_noisy_stroke_01.gdshader" id="1_5f2jb"]
 [ext_resource type="Texture2D" uid="uid://cmm4pb3ulda0b" path="res://addons/h_slider_resizable/examples/resources/input_stroke_texture_01.tres" id="2_x2yj5"]
 
 [resource]
