@@ -1,8 +1,8 @@
 @tool
 extends EditorPlugin
 
-const SliderResizablePlugin = preload("h_slider_resizable.gd")
-const ResetSliderPlugin = preload("reset_slider_inspector_plugin.gd")
+const SliderResizablePlugin = preload("scripts/h_slider_resizable.gd")
+const ResetSliderPlugin = preload("scripts/reset_slider_inspector_plugin.gd")
 var reset_slider_plugin = ResetSliderPlugin.new()
 
 

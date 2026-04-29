@@ -1,7 +1,16 @@
-[gd_scene load_steps=6 format=3 uid="uid://dwqj0w1l2dxkp"]
+[gd_scene load_steps=8 format=3 uid="uid://dwqj0w1l2dxkp"]
 
 [ext_resource type="Theme" uid="uid://458fksvt63he" path="res://addons/h_slider_resizable/examples/resources/ui_theme_01.tres" id="1_abkc2"]
 [ext_resource type="Script" uid="uid://ckscn6l7d4g8x" path="res://addons/h_slider_resizable/scripts/h_slider_resizable.gd" id="2_42r0d"]
+[ext_resource type="Script" uid="uid://bmodlkntltmk6" path="res://addons/h_slider_resizable/scripts/alignment_ratios.gd" id="3_abkc2"]
+
+[sub_resource type="Resource" id="Resource_abkc2"]
+script = ExtResource("3_abkc2")
+offset_left = 0.5
+offset_right = -0.5
+inner_size_ratio = 1.0
+inner_offset_left = -0.5
+inner_offset_right = 0.5
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_r7fe7"]
 bg_color = Color(0.89059, 0.89059, 0.8905901, 1)
@@ -36,6 +45,7 @@ step = 0.05
 value = 1.0
 script = ExtResource("2_42r0d")
 _initialized = true
+_alignment_ratio = SubResource("Resource_abkc2")
 metadata/_custom_type_script = "uid://ckscn6l7d4g8x"
 metadata/_edit_use_anchors_ = true
 metadata/_edit_group_ = true
@@ -67,7 +77,7 @@ mouse_filter = 1
 use_parent_material = true
 layout_mode = 1
 anchors_preset = -1
-anchor_right = 0.057
+anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
@@ -91,13 +101,13 @@ theme = ExtResource("1_abkc2")
 theme_type_variation = &"SliderResizableFill"
 
 [node name="Grabber" type="Panel" parent="GrabberContainer/GrabberWrapper"]
-layout_direction = 1
 layout_mode = 1
 anchors_preset = -1
+anchor_left = 1.0
+anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = -27.0
 offset_right = 27.0
-grow_horizontal = 2
+grow_horizontal = 0
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_abkc2")
-metadata/_edit_use_anchors_ = true

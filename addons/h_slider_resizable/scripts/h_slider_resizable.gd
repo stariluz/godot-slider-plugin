@@ -2,14 +2,14 @@
 extends HSlider
 class_name HSliderResizable
 
-@export var fill_centered_to_grabber:bool=true:
+enum GrabberAlignmentMode{
+	MANUAL,
+	PROPORTIONAL_TO_GRABBER_HEIGHT
+}
+
+@export var grabber_alignment_mode:GrabberAlignmentMode = GrabberAlignmentMode.PROPORTIONAL_TO_GRABBER_HEIGHT:
 	set(value):
-		fill_centered_to_grabber=value
-		_update_margins()
-		
-@export var grabber_centered_on_limits:bool=true:
-	set(value):
-		grabber_centered_on_limits=value
+		grabber_alignment_mode=value
 		_update_margins()
 		
 @export var fill_offset:float=0.0:
@@ -18,7 +18,7 @@ class_name HSliderResizable
 		_update_margins()
 		
 @export_storage var _initialized:bool = false
-@export_storage var _alignment_ratio:Vector2 = Vector2.ZERO
+@export_storage var _alignment_ratio:AlignmentRatios = AlignmentRatios.new()
 		
 @onready var fill_container:Control
 @onready var fill:Control
@@ -64,6 +64,7 @@ func _ready() -> void:
 	else:
 		_bind_ui()
 	
+	_update_margins()
 	_update_ui()
 
 func get_state():
@@ -84,7 +85,10 @@ func set_state(state:PackedScene) -> void:
 	
 	instance.queue_free()
 	_restore_properties(instance)
+	
+	await get_tree().process_frame
 	_bind_ui()
+	_update_margins()
 	_update_ui()
 	
 func _restore_properties(instance:HSliderResizable):
@@ -97,11 +101,14 @@ func reset_children()-> void:
 	set_state(_default_scene)
 	
 func save_alignment_ratio()->void:
-	_alignment_ratio=Vector2(
+	_alignment_ratio=AlignmentRatios.new(
 		grabber_container.offset_left/grabber.size.y,
-		grabber_container.offset_right/grabber.size.y
+		grabber_container.offset_right/grabber.size.y,
+		grabber.size.x/grabber.size.y,
+		grabber.offset_left/grabber.size.y,
+		grabber.offset_right/grabber.size.y,
 	) 
-	print("Alignment ratio:", _alignment_ratio)
+	print(_alignment_ratio)
 	
 func _bind_ui()->void:
 	fill_container = _get_fill_container()
@@ -109,9 +116,8 @@ func _bind_ui()->void:
 	grabber_container = _get_grabber_container()
 	grabber = _get_grabber()
 	
-	if grabber:
-		if not grabber.resized.is_connected(_on_grabber_resized):
-			grabber.resized.connect(_on_grabber_resized)
+	if not self.resized.is_connected(_on_resized):
+		self.resized.connect(_on_resized)
 	
 	if not gui_input.is_connected(_on_gui_input):
 		gui_input.connect(_on_gui_input)
@@ -122,39 +128,32 @@ func _update_ui() -> void:
 	
 	var visual_value:float = ratio
 	
-	if grabber.resized.is_connected(_on_grabber_resized):
-		grabber.resized.disconnect(_on_grabber_resized)
-		
 	fill.anchor_right = visual_value
 	grabber.anchor_left = visual_value
 	grabber.anchor_right = visual_value
-	
-	grabber.resized.connect(_on_grabber_resized)
 
 func _update_margins() -> void:
 	if not grabber or not grabber_container or not fill_container:
 		return
-		
-	#var margin_value=0.0
-	#if !grabber_centered_on_limits:
-		#margin_value = grabber.size.y / 2.0
+	
+	if grabber_alignment_mode == GrabberAlignmentMode.PROPORTIONAL_TO_GRABBER_HEIGHT:
+		#print("UPDATE MARGINS")
+		#self.print_debug(grabber_container)
+		#self.print_debug(grabber.get_parent())
+		#self.print_debug(grabber)
 		#
-	#fill.offset_left=-margin_value
-	#if !fill_centered_to_grabber:
-		#fill.offset_right=margin_value+fill_offset
-	#else:
-		#fill.offset_right=+fill_offset
-	#
-	#fill_container.add_theme_constant_override("margin_left", margin_value)
-	#fill_container.add_theme_constant_override("margin_right", margin_value)
-	#grabber_container.add_theme_constant_override("margin_left", margin_value)
-	#grabber_container.add_theme_constant_override("margin_right", margin_value)
+		#print(_alignment_ratio)
+		
+		grabber_container.offset_left=grabber.size.y*_alignment_ratio.offset_left
+		grabber_container.offset_right=grabber.size.y*_alignment_ratio.offset_right
+		grabber.size.x=grabber.size.y*_alignment_ratio.inner_size_ratio
+		grabber.offset_left=grabber.size.y*_alignment_ratio.inner_offset_left
+		grabber.offset_right=grabber.size.y*_alignment_ratio.inner_offset_right
 	
-	#grabber.size.x=grabber.size.y
-	#grabber.offset_left=-grabber.size.y/2
-	#grabber.offset_right=grabber.size.y/2
-	
-func _on_grabber_resized() -> void:
+func print_debug(a: Node) -> void:
+	print(a.name," p:", a.position, " ol:", a.offset_left, " or:", a.offset_right, " s:", a.size)
+
+func _on_resized() -> void:
 	_update_margins()
 
 func _on_gui_input(event:InputEvent)->void:

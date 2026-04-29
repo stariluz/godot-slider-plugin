@@ -1,7 +1,16 @@
-[gd_scene load_steps=6 format=3 uid="uid://ccjw3jgof58bm"]
+[gd_scene load_steps=8 format=3 uid="uid://ccjw3jgof58bm"]
 
 [ext_resource type="Theme" uid="uid://458fksvt63he" path="res://addons/h_slider_resizable/examples/resources/ui_theme_01.tres" id="1_h1pu4"]
 [ext_resource type="Script" uid="uid://ckscn6l7d4g8x" path="res://addons/h_slider_resizable/scripts/h_slider_resizable.gd" id="2_6ehs4"]
+[ext_resource type="Script" uid="uid://bmodlkntltmk6" path="res://addons/h_slider_resizable/scripts/alignment_ratios.gd" id="3_h1pu4"]
+
+[sub_resource type="Resource" id="Resource_abkc2"]
+script = ExtResource("3_h1pu4")
+offset_left = 0.5
+offset_right = -0.5
+inner_size_ratio = 1.0
+inner_offset_left = -0.5
+inner_offset_right = 0.5
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_r7fe7"]
 bg_color = Color(0.89059, 0.89059, 0.8905901, 1)
@@ -23,25 +32,24 @@ corner_radius_bottom_left = 10
 [node name="HSliderResizable" type="HSlider"]
 custom_minimum_size = Vector2(0, 54)
 anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 0.021276595
-offset_bottom = -4.0
+anchor_left = 0.03125
+anchor_top = 0.015957447
+anchor_right = 0.9458333
+anchor_bottom = 0.07978723
 grow_horizontal = 2
+grow_vertical = 2
 size_flags_vertical = 1
 focus_mode = 0
 mouse_default_cursor_shape = 10
 theme = ExtResource("1_h1pu4")
 max_value = 1.0
 step = 0.05
-value = 1.0
 tick_count = 2
 ticks_on_borders = true
 script = ExtResource("2_6ehs4")
-grabber_centered_on_limits = false
 _initialized = true
-_alignment_ratio = Vector2(0.5, -0.5)
+_alignment_ratio = SubResource("Resource_abkc2")
 metadata/_custom_type_script = "uid://ckscn6l7d4g8x"
-metadata/_edit_group_ = true
 metadata/_edit_use_anchors_ = true
 
 [node name="Track" type="Panel" parent="."]
@@ -71,7 +79,6 @@ mouse_filter = 1
 use_parent_material = true
 layout_mode = 1
 anchors_preset = -1
-anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
@@ -83,8 +90,8 @@ layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 27.0
-offset_right = -27.0
+offset_left = 30.0
+offset_right = -30.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -95,15 +102,11 @@ theme = ExtResource("1_h1pu4")
 theme_type_variation = &"SliderResizableFill"
 
 [node name="Grabber" type="Panel" parent="GrabberContainer/GrabberWrapper"]
-layout_direction = 1
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 1.0
-anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -27.0
-offset_right = 27.0
-grow_horizontal = 2
+offset_left = -30.0
+offset_right = 30.0
+grow_horizontal = 0
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_abkc2")
-metadata/_edit_use_anchors_ = true
