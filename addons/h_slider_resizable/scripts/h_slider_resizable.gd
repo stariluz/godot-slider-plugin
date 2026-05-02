@@ -1,6 +1,7 @@
 @tool
 extends HSlider
 class_name HSliderResizable
+signal autosave_alignment_ratios_changed()
 
 enum GrabberAlignmentMode{
 	MANUAL,
@@ -12,13 +13,16 @@ enum GrabberAlignmentMode{
 		grabber_alignment_mode=value
 		_update_margins()
 		
-@export var fill_offset:float=0.0:
+@export var debug_mode:bool=false
+
+@export var autosave_alignment_ratios:bool=true:
 	set(value):
-		fill_offset=value
-		_update_margins()
+		autosave_alignment_ratios=value
+		autosave_alignment_ratios_changed.emit()
+		_bind_controls_changes()
 		
 @export_storage var _initialized:bool = false
-@export_storage var _alignment_ratio:AlignmentRatios = AlignmentRatios.new()
+@export_storage var _alignment_ratios:AlignmentRatios
 		
 @onready var fill_container:Control
 @onready var fill:Control
@@ -55,11 +59,13 @@ func _notification(what):
 		_update_ui()
 		
 func _ready() -> void:
+	if debug_mode:
+		print(_ready)
 	if _default_scene == null:
 		_default_scene = _load_default_scene()
 
 	if Engine.is_editor_hint() and not _initialized:
-		reset_children()
+		initialize()
 		_initialized = true
 	else:
 		_bind_ui()
@@ -70,11 +76,17 @@ func _ready() -> void:
 func get_state():
 	var scene := PackedScene.new()
 	scene.pack(self)
+	
+	if debug_mode:
+		print(get_state, scene)
 	return scene
 	
 func set_state(state:PackedScene) -> void:
 	if state == null:
 		return
+		
+	if debug_mode:
+		print(set_state.get_method(), "()")
 	
 	ReparentHelper.clean_children(self)
 	
@@ -86,7 +98,6 @@ func set_state(state:PackedScene) -> void:
 	instance.queue_free()
 	_restore_properties(instance)
 	
-	await get_tree().process_frame
 	_bind_ui()
 	_update_margins()
 	_update_ui()
@@ -94,23 +105,33 @@ func set_state(state:PackedScene) -> void:
 func _restore_properties(instance:HSliderResizable):
 	if !instance is HSliderResizable:
 		return
+	var ratios:AlignmentRatios=instance._alignment_ratios as AlignmentRatios
+	self._alignment_ratios=ratios
+	if debug_mode:
+		print(_restore_properties," -> ", ratios)
 	
-	self._alignment_ratio=instance._alignment_ratio
-	
-func reset_children()-> void:
+func initialize()-> void:
+	if debug_mode:
+		print(initialize)
 	set_state(_default_scene)
 	
-func save_alignment_ratio()->void:
-	_alignment_ratio=AlignmentRatios.new(
-		grabber_container.offset_left/grabber.size.y,
-		grabber_container.offset_right/grabber.size.y,
-		grabber.size.x/grabber.size.y,
-		grabber.offset_left/grabber.size.y,
-		grabber.offset_right/grabber.size.y,
-	) 
-	print(_alignment_ratio)
+func reset_children()-> void:
+	if debug_mode:
+		print(reset_children)
+	set_state(_default_scene)
+	
+func save_alignment_ratios()->void:
+	if not fill or not grabber or not grabber_container or not fill_container:
+		return
+		
+	_alignment_ratios=AlignmentRatios.calculate_ratios(grabber,grabber_container,fill,fill_container)
+	if debug_mode:
+		print(save_alignment_ratios, " -> ", _alignment_ratios)
 	
 func _bind_ui()->void:
+	if debug_mode:
+		print(_bind_ui)
+		
 	fill_container = _get_fill_container()
 	fill = _get_fill()
 	grabber_container = _get_grabber_container()
@@ -121,39 +142,84 @@ func _bind_ui()->void:
 	
 	if not gui_input.is_connected(_on_gui_input):
 		gui_input.connect(_on_gui_input)
+		
+	_bind_controls_changes()
+		
+func _bind_controls_changes():
+	if not is_inside_tree() or not fill or not grabber:
+		return
+		
+	if debug_mode:
+		print(_bind_controls_changes, " -> autosave_alignment_ratios:", autosave_alignment_ratios)
+		
+	if autosave_alignment_ratios:
+		if not grabber.resized.is_connected(_on_controls_resized):
+			grabber.resized.connect(_on_controls_resized)
+		if not grabber_container.resized.is_connected(_on_controls_resized):
+			grabber_container.resized.connect(_on_controls_resized)
+		if not fill.resized.is_connected(_on_controls_resized):
+			fill.resized.connect(_on_controls_resized)
+		if not fill_container.resized.is_connected(_on_controls_resized):
+			fill_container.resized.connect(_on_controls_resized)
+	else:
+		if grabber.resized.is_connected(_on_controls_resized):
+			grabber.resized.disconnect(_on_controls_resized)
+		if grabber_container.resized.is_connected(_on_controls_resized):
+			grabber_container.resized.disconnect(_on_controls_resized)
+		if fill.resized.is_connected(_on_controls_resized):
+			fill.resized.disconnect(_on_controls_resized)
+		if fill_container.resized.is_connected(_on_controls_resized):
+			fill_container.resized.disconnect(_on_controls_resized)
 
 func _update_ui() -> void:
 	if not is_inside_tree() or not fill or not grabber:
 		return
-	
-	var visual_value:float = ratio
-	
-	fill.anchor_right = visual_value
-	grabber.anchor_left = visual_value
-	grabber.anchor_right = visual_value
+		
+	if debug_mode:
+		print(_update_ui)
+		
+	fill.anchor_right = ratio
+	grabber.anchor_left = ratio
+	grabber.anchor_right = ratio
 
 func _update_margins() -> void:
 	if not grabber or not grabber_container or not fill_container:
 		return
 	
 	if grabber_alignment_mode == GrabberAlignmentMode.PROPORTIONAL_TO_GRABBER_HEIGHT:
-		#print("UPDATE MARGINS")
-		#self.print_debug(grabber_container)
-		#self.print_debug(grabber.get_parent())
-		#self.print_debug(grabber)
-		#
-		#print(_alignment_ratio)
+		await get_tree().process_frame
 		
-		grabber_container.offset_left=grabber.size.y*_alignment_ratio.offset_left
-		grabber_container.offset_right=grabber.size.y*_alignment_ratio.offset_right
-		grabber.size.x=grabber.size.y*_alignment_ratio.inner_size_ratio
-		grabber.offset_left=grabber.size.y*_alignment_ratio.inner_offset_left
-		grabber.offset_right=grabber.size.y*_alignment_ratio.inner_offset_right
+		if debug_mode:
+			print(_update_margins, " -> ", _alignment_ratios)
+			self.print_debug(grabber_container)
+			self.print_debug(grabber.get_parent())
+			self.print_debug(grabber)
+			breakpoint
+			
+		grabber_container.offset_left=grabber.size.y*_alignment_ratios.grabber_container_offset_left
+		grabber_container.offset_right=grabber.size.y*_alignment_ratios.grabber_container_offset_right
+		#grabber.size.x=grabber.size.y*_alignment_ratios.grabber_size_ratio
+		grabber.offset_left=grabber.size.y*_alignment_ratios.grabber_offset_left
+		grabber.offset_right=grabber.size.y*_alignment_ratios.grabber_offset_right
+		fill.offset_left=grabber.size.y*_alignment_ratios.fill_offset_left
+		fill.offset_right=grabber.size.y*_alignment_ratios.fill_offset_right
+		fill_container.offset_left=grabber.size.y*_alignment_ratios.fill_container_offset_left
+		fill_container.offset_right=grabber.size.y*_alignment_ratios.fill_container_offset_right
 	
 func print_debug(a: Node) -> void:
-	print(a.name," p:", a.position, " ol:", a.offset_left, " or:", a.offset_right, " s:", a.size)
+	if debug_mode:
+		print(a.name," p:", a.position, " ol:", a.offset_left, " or:", a.offset_right, " s:", a.size)
 
+func _on_controls_resized() -> void:
+	if debug_mode:
+		print(_on_controls_resized)
+		
+	if autosave_alignment_ratios:
+		save_alignment_ratios()
+	
 func _on_resized() -> void:
+	if debug_mode:
+		print(_on_resized)
 	_update_margins()
 
 func _on_gui_input(event:InputEvent)->void:
